@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sisonke CV - Money Flow Chart</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px 15px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.95;
+        }
+
+        .calculator-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+
+        .input-section {
+            margin-bottom: 25px;
+        }
+
+        .input-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .currency {
+            position: absolute;
+            left: 15px;
+            font-size: 24px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        #incomeInput {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            font-size: 24px;
+            font-weight: 700;
+            border: 3px solid #e0e0e0;
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        #incomeInput:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .flow-item {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .flow-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .flow-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .flow-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .flow-percent {
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .flow-amount {
+            font-size: 32px;
+            font-weight: 900;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .flow-description {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .sub-item {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .sub-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .sub-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .sub-percent {
+            font-size: 12px;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .sub-amount {
+            font-size: 24px;
+            font-weight: 800;
+            color: #764ba2;
+            margin-bottom: 5px;
+        }
+
+        .sub-description {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .visual-flow {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+
+        .visual-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .flow-diagram {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .flow-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .flow-box.main {
+            font-size: 18px;
+            padding: 20px;
+        }
+
+        .flow-arrow {
+            text-align: center;
+            color: #667eea;
+            font-size: 24px;
+            margin: 5px 0;
+        }
+
+        .flow-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .flow-split-item {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            padding: 12px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            border: 2px solid #667eea;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            font-size: 13px;
+            margin-top: 20px;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 400px) {
+            .flow-amount {
+                font-size: 28px;
+            }
+            .sub-amount {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💼 Sisonke CV</h1>
+            <p>Money Flow Calculator</p>
+        </div>
+
+        <div class="calculator-card">
+            <div class="input-section">
+                <label class="input-label">Enter Your Income</label>
+                <div class="input-wrapper">
+                    <span class="currency">R</span>
+                    <input type="number" id="incomeInput" value="60" min="0" step="1">
+                </div>
+            </div>
+
+            <div class="flow-item">
+                <div class="flow-header">
+                    <span class="flow-title">Tithes & Offerings</span>
+                    <span class="flow-percent">15%</span>
+                </div>
+                <div class="flow-amount">R<span id="tithe">9.00</span></div>
+                <div class="flow-description">Spiritual commitment & giving back</div>
+            </div>
+
+            <div class="flow-item">
+                <div class="flow-header">
+                    <span class="flow-title">Remaining for Business</span>
+                    <span class="flow-percent">85%</span>
+                </div>
+                <div class="flow-amount">R<span id="remaining">51.00</span></div>
+                <div class="flow-description">Split into essentials, growth & savings</div>
+
+                <div class="sub-item">
+                    <div class="sub-header">
+                        <span class="sub-title">💰 Needs / Essentials</span>
+                        <span class="sub-percent">50%</span>
+                    </div>
+                    <div class="sub-amount">R<span id="needs">25.50</span></div>
+                    <div class="sub-description">Cash flow, daily expenses, operations</div>
+                </div>
+
+                <div class="sub-item">
+                    <div class="sub-header">
+                        <span class="sub-title">📈 Growth / Extras</span>
+                        <span class="sub-percent">30%</span>
+                    </div>
+                    <div class="sub-amount">R<span id="growth">15.30</span></div>
+                    <div class="sub-description">Salary, marketing, business growth</div>
+                </div>
+
+                <div class="sub-item">
+                    <div class="sub-header">
+                        <span class="sub-title">🏦 Savings / Investment</span>
+                        <span class="sub-percent">20%</span>
+                    </div>
+                    <div class="sub-amount">R<span id="savings">10.20</span></div>
+                    <div class="sub-description">Emergency fund, long-term investment</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="visual-flow">
+            <div class="visual-title">📊 Visual Flow</div>
+            <div class="flow-diagram">
+                <div class="flow-box main">
+                    Income: R<span id="visualIncome">60</span>
+                </div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-box">
+                    15% → Tithes (R<span id="visualTithe">9.00</span>)
+                </div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-box">
+                    85% → Business (R<span id="visualRemaining">51.00</span>)
+                </div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-split">
+                    <div class="flow-split-item">
+                        50%<br>R<span id="visualNeeds">25.50</span><br>Needs
+                    </div>
+                    <div class="flow-split-item">
+                        30%<br>R<span id="visualGrowth">15.30</span><br>Growth
+                    </div>
+                    <div class="flow-split-item">
+                        20%<br>R<span id="visualSavings">10.20</span><br>Savings
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>✨ Every rand has a purpose<br>Build your business with clarity</p>
+        </div>
+    </div>
+
+    <script>
+        const incomeInput = document.getElementById('incomeInput');
+        
+        function updateCalculations() {
+            const income = parseFloat(incomeInput.value) || 0;
+            
+            const tithe = income * 0.15;
+            const remaining = income * 0.85;
+            const needs = remaining * 0.50;
+            const growth = remaining * 0.30;
+            const savings = remaining * 0.20;
+            
+            document.getElementById('tithe').textContent = tithe.toFixed(2);
+            document.getElementById('remaining').textContent = remaining.toFixed(2);
+            document.getElementById('needs').textContent = needs.toFixed(2);
+            document.getElementById('growth').textContent = growth.toFixed(2);
+            document.getElementById('savings').textContent = savings.toFixed(2);
+            
+            document.getElementById('visualIncome').textContent = income.toFixed(0);
+            document.getElementById('visualTithe').textContent = tithe.toFixed(2);
+            document.getElementById('visualRemaining').textContent = remaining.toFixed(2);
+            document.getElementById('visualNeeds').textContent = needs.toFixed(2);
+            document.getElementById('visualGrowth').textContent = growth.toFixed(2);
+            document.getElementById('visualSavings').textContent = savings.toFixed(2);
+        }
+        
+        incomeInput.addEventListener('input', updateCalculations);
+        
+        updateCalculations();
+    </script>
+</body>
+</html>
