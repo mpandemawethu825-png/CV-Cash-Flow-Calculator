@@ -3,8 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sisonke CV - Money Flow Chart</title>
+    <title>Sisonke CV - Modern Money Flow</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            /* Light Mode Colors */
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-glass: rgba(255, 255, 255, 0.85);
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --shadow: rgba(0, 0, 0, 0.06);
+            
+            /* Dark Mode Colors */
+            --bg-primary-dark: #0f172a;
+            --bg-secondary-dark: #1e293b;
+            --bg-glass-dark: rgba(30, 41, 59, 0.85);
+            --text-primary-dark: #f1f5f9;
+            --text-secondary-dark: #cbd5e1;
+            --text-muted-dark: #94a3b8;
+            --border-color-dark: rgba(255, 255, 255, 0.08);
+            --shadow-dark: rgba(0, 0, 0, 0.3);
+            
+            /* Accent Colors */
+            --primary-50: #eff6ff;
+            --primary-100: #dbeafe;
+            --primary-500: #3b82f6;
+            --primary-600: #2563eb;
+            --primary-700: #1d4ed8;
+            --success-500: #10b981;
+            --success-600: #059669;
+            --warning-500: #f59e0b;
+            --warning-600: #d97706;
+            --purple-500: #8b5cf6;
+            --purple-600: #7c3aed;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,53 +48,110 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
             min-height: 100vh;
-            padding: 20px 15px;
-            color: #333;
+            padding: 20px;
+            line-height: 1.6;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.dark {
+            background: var(--bg-primary-dark);
+            color: var(--text-primary-dark);
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.06) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        body.dark::before {
+            opacity: 0.3;
         }
 
         .container {
-            max-width: 500px;
+            max-width: 640px;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
 
         .header {
             text-align: center;
-            color: white;
-            margin-bottom: 25px;
+            margin-bottom: 40px;
+            animation: slideInDown 0.8s ease-out;
         }
 
         .header h1 {
-            font-size: 28px;
-            margin-bottom: 8px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            font-size: clamp(28px, 5vw, 36px);
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-500), var(--purple-500));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
         }
 
         .header p {
-            font-size: 16px;
-            opacity: 0.95;
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            padding: 12px 24px;
+            border-radius: 50px;
+            display: inline-block;
         }
 
-        .calculator-card {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            margin-bottom: 20px;
+        body.dark .header p {
+            background: var(--bg-glass-dark);
+            border-color: var(--border-color-dark);
+            color: var(--text-secondary-dark);
+        }
+
+        .glass-card {
+            background: var(--bg-glass);
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 20px 40px var(--shadow);
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        body.dark .glass-card {
+            background: var(--bg-glass-dark);
+            border-color: var(--border-color-dark);
+            box-shadow: 0 20px 40px var(--shadow-dark);
         }
 
         .input-section {
-            margin-bottom: 25px;
+            margin-bottom: 32px;
         }
 
         .input-label {
             font-size: 14px;
             font-weight: 600;
-            color: #667eea;
-            margin-bottom: 8px;
+            color: var(--primary-600);
+            margin-bottom: 12px;
             display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .input-wrapper {
@@ -69,35 +162,65 @@
 
         .currency {
             position: absolute;
-            left: 15px;
-            font-size: 24px;
+            left: 18px;
+            font-size: 28px;
             font-weight: 700;
-            color: #667eea;
+            color: var(--primary-600);
+            z-index: 2;
         }
 
         #incomeInput {
             width: 100%;
-            padding: 15px 15px 15px 45px;
-            font-size: 24px;
-            font-weight: 700;
-            border: 3px solid #e0e0e0;
-            border-radius: 12px;
-            transition: all 0.3s;
+            padding: 20px 20px 20px 60px;
+            font-size: 32px;
+            font-weight: 600;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            color: var(--text-primary);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.dark #incomeInput {
+            background: var(--bg-secondary-dark);
+            border-color: var(--border-color-dark);
+            color: var(--text-primary-dark);
+        }
+
+        #incomeInput::placeholder {
+            color: var(--text-muted);
+        }
+
+        body.dark #incomeInput::placeholder {
+            color: var(--text-muted-dark);
         }
 
         #incomeInput:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            border-color: var(--primary-500);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+            transform: translateY(-2px);
         }
 
         .flow-item {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 15px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
             position: relative;
             overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        body.dark .flow-item {
+            background: var(--bg-secondary-dark);
+            border-color: var(--border-color-dark);
+        }
+
+        .flow-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.1);
         }
 
         .flow-item::before {
@@ -107,288 +230,513 @@
             left: 0;
             width: 5px;
             height: 100%;
-            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(180deg, var(--primary-500), var(--primary-700));
+            border-radius: 20px 0 0 20px;
         }
 
         .flow-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 16px;
         }
 
         .flow-title {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 700;
-            color: #333;
+            color: var(--text-primary);
+        }
+
+        body.dark .flow-title {
+            color: var(--text-primary-dark);
         }
 
         .flow-percent {
-            background: #667eea;
+            background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
             color: white;
-            padding: 4px 12px;
+            padding: 6px 16px;
             border-radius: 20px;
-            font-size: 13px;
-            font-weight: 700;
+            font-size: 14px;
+            font-weight: 600;
         }
 
         .flow-amount {
-            font-size: 32px;
-            font-weight: 900;
-            color: #667eea;
-            margin-bottom: 8px;
+            font-size: 36px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
         }
 
         .flow-description {
-            font-size: 13px;
-            color: #666;
-            line-height: 1.5;
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        body.dark .flow-description {
+            color: var(--text-muted-dark);
         }
 
         .sub-item {
-            background: white;
-            border-radius: 12px;
-            padding: 15px;
-            margin-top: 12px;
-            border-left: 4px solid #667eea;
+            background: var(--bg-glass);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 16px;
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        body.dark .sub-item {
+            background: var(--bg-glass-dark);
+        }
+
+        .sub-item.savings { border-left-color: var(--success-500); }
+        .sub-item.cashflow { border-left-color: var(--primary-500); }
+        .sub-item.remainder { border-left-color: var(--warning-500); }
+
+        .sub-item:hover {
+            transform: translateX(4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        body.dark .sub-item:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
         }
 
         .sub-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
 
         .sub-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: #333;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        body.dark .sub-title {
+            color: var(--text-primary-dark);
         }
 
         .sub-percent {
-            font-size: 12px;
-            color: #667eea;
+            font-size: 14px;
             font-weight: 600;
+            color: var(--primary-600);
         }
 
         .sub-amount {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 800;
-            color: #764ba2;
-            margin-bottom: 5px;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        body.dark .sub-amount {
+            color: var(--text-primary-dark);
         }
 
         .sub-description {
-            font-size: 12px;
-            color: #888;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        body.dark .sub-description {
+            color: var(--text-muted-dark);
         }
 
         .visual-flow {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            margin-bottom: 20px;
+            background: var(--bg-glass);
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+
+        body.dark .visual-flow {
+            background: var(--bg-glass-dark);
+            border-color: var(--border-color-dark);
         }
 
         .visual-title {
-            font-size: 18px;
+            font-size: 22px;
             font-weight: 700;
-            color: #333;
-            margin-bottom: 20px;
+            color: var(--text-primary);
+            margin-bottom: 28px;
             text-align: center;
+            background: linear-gradient(135deg, var(--primary-500), var(--purple-500));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        body.dark .visual-title {
+            color: var(--text-primary-dark);
         }
 
         .flow-diagram {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 16px;
+            align-items: center;
         }
 
         .flow-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 15px;
-            border-radius: 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 16px;
             text-align: center;
             font-weight: 600;
-            position: relative;
+            min-width: 220px;
+            transition: all 0.3s ease;
+        }
+
+        body.dark .flow-box {
+            background: var(--bg-secondary-dark);
+            border-color: var(--border-color-dark);
         }
 
         .flow-box.main {
-            font-size: 18px;
-            padding: 20px;
+            font-size: 20px;
+            padding: 28px;
+            background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+            color: white;
+            box-shadow: 0 12px 30px rgba(59, 130, 246, 0.2);
+            border: none;
+        }
+
+        .flow-box:hover {
+            transform: scale(1.02);
         }
 
         .flow-arrow {
             text-align: center;
-            color: #667eea;
-            font-size: 24px;
-            margin: 5px 0;
+            color: var(--primary-500);
+            font-size: 28px;
+            font-weight: 300;
+            margin: 12px 0;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-8px); }
+            60% { transform: translateY(-4px); }
         }
 
         .flow-split {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 8px;
-            margin-top: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+            width: 100%;
         }
 
         .flow-split-item {
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
-            padding: 12px 8px;
-            border-radius: 10px;
-            font-size: 12px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            padding: 20px 12px;
+            border-radius: 16px;
+            font-size: 14px;
             font-weight: 600;
             text-align: center;
-            border: 2px solid #667eea;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
+
+        body.dark .flow-split-item {
+            background: var(--bg-secondary-dark);
+            border-color: var(--border-color-dark);
+        }
+
+        .flow-split-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-500), var(--purple-500));
+        }
+
+        .flow-split-item:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark .flow-split-item:hover {
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .flow-split-item.savings { border-color: var(--success-500); }
+        .flow-split-item.cashflow { border-color: var(--primary-500); }
+        .flow-split-item.remainder { border-color: var(--warning-500); }
 
         .footer {
             text-align: center;
-            color: white;
-            font-size: 13px;
-            margin-top: 20px;
-            opacity: 0.9;
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-top: 32px;
+            padding: 24px;
+            background: var(--bg-glass);
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
         }
 
-        @media (max-width: 400px) {
-            .flow-amount {
-                font-size: 28px;
-            }
-            .sub-amount {
-                font-size: 20px;
-            }
+        body.dark .footer {
+            color: var(--text-muted-dark);
+            background: var(--bg-glass-dark);
+            border-color: var(--border-color-dark);
+        }
+
+        .footer strong {
+            color: var(--primary-600);
+        }
+
+        /* Dark Mode Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            font-size: 20px;
+        }
+
+        body.dark .theme-toggle {
+            background: var(--bg-secondary-dark);
+            border-color: var(--border-color-dark);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 15px; }
+            .glass-card { padding: 24px; }
+            .flow-amount { font-size: 32px; }
+            .sub-amount { font-size: 24px; }
+            .flow-split { grid-template-columns: 1fr; }
+            .theme-toggle { top: 15px; right: 15px; }
+        }
+
+        @keyframes slideInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pulse-glow {
+            box-shadow: 0 0 0 rgba(59, 130, 246, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 rgba(59, 130, 246, 0.4); }
+            50% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.6); }
+            100% { box-shadow: 0 0 0 rgba(59, 130, 246, 0.4); }
         }
     </style>
 </head>
 <body>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark Mode">🌙</button>
+    
     <div class="container">
         <div class="header">
-            <h1>💼 Sisonke CV</h1>
-            <p>Money Flow Calculator</p>
+            <h1>Sisonke CV</h1>
+            <p>Modern Money Flow Calculator</p>
         </div>
 
-        <div class="calculator-card">
+        <div class="glass-card">
             <div class="input-section">
-                <label class="input-label">Enter Your Income</label>
+                <label class="input-label">Enter Your Monthly Income</label>
                 <div class="input-wrapper">
                     <span class="currency">R</span>
-                    <input type="number" id="incomeInput" value="60" min="0" step="1">
+                    <input type="number" id="incomeInput" value="60000" min="0" step="100" placeholder="60000">
                 </div>
             </div>
 
-            <div class="flow-item">
+            <div class="flow-item pulse-glow">
                 <div class="flow-header">
                     <span class="flow-title">Tithes & Offerings</span>
-                    <span class="flow-percent">15%</span>
+                    <span class="flow-percent">16%</span>
                 </div>
-                <div class="flow-amount">R<span id="tithe">9.00</span></div>
-                <div class="flow-description">Spiritual commitment & giving back</div>
+                <div class="flow-amount">R<span id="tithe">9600.00</span></div>
+                <div class="flow-description">First fruits - spiritual foundation and giving</div>
             </div>
 
             <div class="flow-item">
                 <div class="flow-header">
-                    <span class="flow-title">Remaining for Business</span>
-                    <span class="flow-percent">85%</span>
+                    <span class="flow-title">Business Allocation</span>
+                    <span class="flow-percent">84%</span>
                 </div>
-                <div class="flow-amount">R<span id="remaining">51.00</span></div>
-                <div class="flow-description">Split into essentials, growth & savings</div>
+                <div class="flow-amount">R<span id="businessTotal">50400.00</span></div>
+                <div class="flow-description">Strategic business distribution</div>
 
-                <div class="sub-item">
+                <div class="sub-item savings">
                     <div class="sub-header">
-                        <span class="sub-title">💰 Needs / Essentials</span>
-                        <span class="sub-percent">50%</span>
+                        <span class="sub-title">Business Savings</span>
+                        <span class="sub-percent">40%</span>
                     </div>
-                    <div class="sub-amount">R<span id="needs">25.50</span></div>
-                    <div class="sub-description">Cash flow, daily expenses, operations</div>
-                </div>
-
-                <div class="sub-item">
-                    <div class="sub-header">
-                        <span class="sub-title">📈 Growth / Extras</span>
-                        <span class="sub-percent">30%</span>
-                    </div>
-                    <div class="sub-amount">R<span id="growth">15.30</span></div>
-                    <div class="sub-description">Salary, marketing, business growth</div>
+                    <div class="sub-amount">R<span id="savings">20160.00</span></div>
+                    <div class="sub-description">Future growth, emergency fund, investments</div>
                 </div>
 
-                <div class="sub-item">
+                <div class="sub-item cashflow">
                     <div class="sub-header">
-                        <span class="sub-title">🏦 Savings / Investment</span>
-                        <span class="sub-percent">20%</span>
+                        <span class="sub-title">Business Cash Flow</span>
+                        <span class="sub-percent">25%</span>
                     </div>
-                    <div class="sub-amount">R<span id="savings">10.20</span></div>
-                    <div class="sub-description">Emergency fund, long-term investment</div>
+                    <div class="sub-amount">R<span id="cashflow">12600.00</span></div>
+                    <div class="sub-description">Operations, daily expenses, working capital</div>
+                </div>
+
+                <div class="sub-item remainder">
+                    <div class="sub-header">
+                        <span class="sub-title">Business Growth</span>
+                        <span class="sub-percent">39%</span>
+                    </div>
+                    <div class="sub-amount">R<span id="remainder">17640.00</span></div>
+                    <div class="sub-description">Growth initiatives, marketing, expansion</div>
                 </div>
             </div>
         </div>
 
         <div class="visual-flow">
-            <div class="visual-title">📊 Visual Flow</div>
+            <div class="visual-title">Visual Money Flow</div>
             <div class="flow-diagram">
                 <div class="flow-box main">
-                    Income: R<span id="visualIncome">60</span>
+                    Total Income<br>
+                    R<span id="visualIncome">60000</span>
                 </div>
                 <div class="flow-arrow">↓</div>
                 <div class="flow-box">
-                    15% → Tithes (R<span id="visualTithe">9.00</span>)
+                    16% → Tithes<br>
+                    R<span id="visualTithe">9600.00</span>
                 </div>
                 <div class="flow-arrow">↓</div>
                 <div class="flow-box">
-                    85% → Business (R<span id="visualRemaining">51.00</span>)
+                    84% → Business<br>
+                    R<span id="visualBusiness">50400.00</span>
                 </div>
                 <div class="flow-arrow">↓</div>
                 <div class="flow-split">
-                    <div class="flow-split-item">
-                        50%<br>R<span id="visualNeeds">25.50</span><br>Needs
+                    <div class="flow-split-item savings">
+                        40%<br>
+                        R<span id="visualSavings">20160.00</span><br>
+                        Savings
                     </div>
-                    <div class="flow-split-item">
-                        30%<br>R<span id="visualGrowth">15.30</span><br>Growth
+                    <div class="flow-split-item cashflow">
+                        25%<br>
+                        R<span id="visualCashflow">12600.00</span><br>
+                        Cash Flow
                     </div>
-                    <div class="flow-split-item">
-                        20%<br>R<span id="visualSavings">10.20</span><br>Savings
+                    <div class="flow-split-item remainder">
+                        39%<br>
+                        R<span id="visualRemainder">17640.00</span><br>
+                        Growth
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="footer">
-            <p>✨ Every rand has a purpose<br>Build your business with clarity</p>
+            <p><strong>Every Rand Has Purpose</strong><br>
+            Build your business empire with crystal clear financial discipline</p>
         </div>
     </div>
 
     <script>
         const incomeInput = document.getElementById('incomeInput');
         
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-ZA', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(amount);
+        }
+
         function updateCalculations() {
             const income = parseFloat(incomeInput.value) || 0;
             
-            const tithe = income * 0.15;
-            const remaining = income * 0.85;
-            const needs = remaining * 0.50;
-            const growth = remaining * 0.30;
-            const savings = remaining * 0.20;
+            const tithe = income * 0.16;
+            const businessTotal = income * 0.84;
+            const savings = businessTotal * 0.40;
+            const cashflow = businessTotal * 0.25;
+            const remainder = businessTotal * 0.39;
             
-            document.getElementById('tithe').textContent = tithe.toFixed(2);
-            document.getElementById('remaining').textContent = remaining.toFixed(2);
-            document.getElementById('needs').textContent = needs.toFixed(2);
-            document.getElementById('growth').textContent = growth.toFixed(2);
-            document.getElementById('savings').textContent = savings.toFixed(2);
+            document.getElementById('tithe').textContent = formatCurrency(tithe);
+            document.getElementById('businessTotal').textContent = formatCurrency(businessTotal);
+            document.getElementById('savings').textContent = formatCurrency(savings);
+            document.getElementById('cashflow').textContent = formatCurrency(cashflow);
+            document.getElementById('remainder').textContent = formatCurrency(remainder);
             
-            document.getElementById('visualIncome').textContent = income.toFixed(0);
-            document.getElementById('visualTithe').textContent = tithe.toFixed(2);
-            document.getElementById('visualRemaining').textContent = remaining.toFixed(2);
-            document.getElementById('visualNeeds').textContent = needs.toFixed(2);
-            document.getElementById('visualGrowth').textContent = growth.toFixed(2);
-            document.getElementById('visualSavings').textContent = savings.toFixed(2);
+            document.getElementById('visualIncome').textContent = formatCurrency(income);
+            document.getElementById('visualTithe').textContent = formatCurrency(tithe);
+            document.getElementById('visualBusiness').textContent = formatCurrency(businessTotal);
+            document.getElementById('visualSavings').textContent = formatCurrency(savings);
+            document.getElementById('visualCashflow').textContent = formatCurrency(cashflow);
+            document.getElementById('visualRemainder').textContent = formatCurrency(remainder);
         }
         
         incomeInput.addEventListener('input', updateCalculations);
-        
+        incomeInput.addEventListener('keyup', updateCalculations);
         updateCalculations();
+
+        // Dark Mode Toggle
+        function toggleTheme() {
+            document.body.classList.toggle('dark');
+            localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark');
+        }
+
+        // Auto-detect system preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches && !savedTheme) {
+            document.body.classList.add('dark');
+        }
+
+        // Listen for system theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (!localStorage.getItem('theme')) {
+                document.body.classList.toggle('dark', e.matches);
+            }
+        });
+
+        // Smooth scroll on input focus
+        incomeInput.addEventListener('focus', () => {
+            incomeInput.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center' 
+            });
+        });
     </script>
 </body>
 </html>
