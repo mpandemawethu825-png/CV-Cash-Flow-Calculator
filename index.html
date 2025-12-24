@@ -3,260 +3,204 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sisonke CV - Wealth Flow Pro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Sisonke CV - Google Sync Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         :root {
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --bg-glass: rgba(30, 41, 59, 0.8);
-            --text-primary: #f1f5f9;
-            --text-secondary: #cbd5e1;
-            --text-muted: #94a3b8;
-            --border-color: rgba(255, 255, 255, 0.1);
-            --primary-500: #3b82f6;
-            --success-500: #10b981;
-            --warning-500: #f59e0b;
-            --purple-500: #8b5cf6;
-            --stock-indigo: #6366f1;
+            --google-blue: #4285F4; --google-red: #EA4335; --google-yellow: #FBBC05;
+            --google-green: #34A853; --bg-light: #F8F9FA; --text-dark: #202124;
+            --border-gray: #DADCE0;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            padding: 20px;
-            line-height: 1.6;
-        }
+        body { font-family: 'Roboto', sans-serif; background-color: var(--bg-light); color: var(--text-dark); padding: 20px; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 850px; }
+        .header { text-align: center; margin-bottom: 24px; }
+        .header h1 { font-weight: 500; color: #5f6368; }
 
-        .container { max-width: 900px; margin: 0 auto; }
+        /* Summary Dashboard */
+        .summary-dashboard { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+        .summary-item { background: white; border: 1px solid var(--border-gray); padding: 15px; border-radius: 8px; text-align: center; }
+        .summary-item strong { display: block; font-size: 18px; color: var(--google-blue); }
+        .summary-item label { font-size: 11px; text-transform: uppercase; color: #70757a; }
+
+        .card { background: white; border: 1px solid var(--border-gray); border-radius: 8px; padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(60,64,67,.15); }
+
+        .lock-overlay { opacity: 0.3; pointer-events: none; transition: 0.3s; }
+        .unlocked { opacity: 1; pointer-events: all; }
+
+        .upload-zone { border: 2px dashed var(--google-blue); padding: 30px; text-align: center; border-radius: 8px; background: #f1f3f4; cursor: pointer; }
         
-        .header { text-align: center; margin-bottom: 30px; }
-        .header h1 { 
-            font-size: 36px; 
-            background: linear-gradient(135deg, var(--primary-500), var(--stock-indigo));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        input[type="number"] { width: 100%; padding: 12px; font-size: 24px; border: 1px solid var(--border-gray); border-radius: 4px; box-sizing: border-box; }
 
-        .glass-card {
-            background: var(--bg-glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            padding: 32px;
-            margin-bottom: 24px;
-        }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin: 20px 0; }
+        .stat-card { padding: 12px; border-radius: 4px; background: #fff; border: 1px solid var(--border-gray); border-left: 5px solid; }
+        .stat-val { font-size: 16px; font-weight: 700; display: block; }
+        .stat-label { font-size: 10px; color: #70757a; text-transform: uppercase; }
 
-        .input-label { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--primary-500); display: block; margin-bottom: 10px; }
+        .btn { padding: 12px 24px; border-radius: 4px; font-weight: 500; border: none; cursor: pointer; transition: 0.2s; }
+        .btn-blue { background: var(--google-blue); color: white; }
+        .btn-green { background: var(--google-green); color: white; }
+        .btn-whatsapp { background: #25D366; color: white; width: 100%; margin-top: 10px; }
         
-        .input-wrapper { position: relative; margin-bottom: 20px; }
-        .currency { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); font-size: 30px; font-weight: 800; color: var(--primary-500); }
-        
-        #incomeInput {
-            width: 100%;
-            padding: 20px 20px 20px 60px;
-            font-size: 32px;
-            background: var(--bg-secondary);
-            border: 2px solid var(--border-color);
-            border-radius: 16px;
-            color: white;
-            font-weight: 700;
-        }
-
-        .allocation-section {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .allocation-card {
-            background: var(--bg-secondary);
-            padding: 20px;
-            border-radius: 16px;
-            border-top: 4px solid;
-            transition: 0.3s;
-        }
-        .allocation-card:hover { transform: translateY(-5px); }
-        .tithes { border-color: var(--purple-500); }
-        .savings { border-color: var(--success-500); }
-        .cashflow { border-color: var(--primary-500); }
-        .growth { border-color: var(--warning-500); }
-        .stock { border-color: var(--stock-indigo); }
-
-        .amt { font-size: 22px; font-weight: 800; display: block; }
-        .cat { font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
-
-        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        button {
-            padding: 15px;
-            border-radius: 12px;
-            border: none;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .update-btn { background: var(--primary-500); color: white; }
-        .preview-btn { background: var(--bg-secondary); color: white; border: 1px solid var(--border-color); }
-        .whatsapp-btn { background: #25D366; color: white; grid-column: span 2; }
-        button:hover { opacity: 0.9; transform: scale(0.98); }
-
-        .spreadsheet-status { padding: 15px; border-radius: 12px; margin-bottom: 20px; text-align: center; font-size: 14px; }
-        .status-success { background: rgba(16, 185, 129, 0.1); color: var(--success-500); }
-
-        /* Modal Styles */
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 1000; }
-        .modal-content { background: var(--bg-secondary); width: 90%; max-width: 800px; border-radius: 20px; padding: 20px; max-height: 80vh; overflow-y: auto; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 12px; }
-        th, td { padding: 10px; border: 1px solid var(--border-color); text-align: left; }
+        #status-bar { padding: 12px; border-radius: 4px; margin-bottom: 15px; font-size: 14px; text-align: center; display: none; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="header">
-            <h1>Sisonke Wealth Flow</h1>
-            <p style="color: var(--text-muted)">Financial Integrity for Design & Tutoring</p>
+<div class="container">
+    <div class="header">
+        <h1>Sisonke CV Business Tracker</h1>
+    </div>
+
+    <div class="summary-dashboard">
+        <div class="summary-item">
+            <label>Total Revenue</label>
+            <strong id="totalRev">R0.00</strong>
         </div>
-
-        <div id="status" class="spreadsheet-status status-success">✨ System Initialized</div>
-
-        <div class="glass-card">
-            <label class="input-label">Monthly Gross Revenue</label>
-            <div class="input-wrapper">
-                <span class="currency">R</span>
-                <input type="number" id="incomeInput" value="60000" oninput="calculate()">
-            </div>
-
-            <div class="allocation-section">
-                <div class="allocation-card tithes">
-                    <span class="amt" id="titheDisp">R0.00</span>
-                    <span class="cat">Tithes (16%)</span>
-                </div>
-                <div class="allocation-card savings">
-                    <span class="amt" id="saveDisp">R0.00</span>
-                    <span class="cat">Biz Savings (40%)</span>
-                </div>
-                <div class="allocation-card cashflow">
-                    <span class="amt" id="flowDisp">R0.00</span>
-                    <span class="cat">Operations (25%)</span>
-                </div>
-                <div class="allocation-card growth">
-                    <span class="amt" id="growDisp">R0.00</span>
-                    <span class="cat">Biz Growth (10%)</span>
-                </div>
-                <div class="allocation-card stock">
-                    <span class="amt" id="stockDisp">R0.00</span>
-                    <span class="cat">Stock Reserve (9%)</span>
-                </div>
-            </div>
-
-            <div class="btn-group">
-                <button class="whatsapp-btn" onclick="copyWhatsApp()">📱 Copy WhatsApp Summary</button>
-                <button class="update-btn" onclick="updateExcel()">💾 Sync to Excel</button>
-                <button class="preview-btn" onclick="toggleModal(true)">👁️ View Ledger</button>
-            </div>
+        <div class="summary-item">
+            <label>Total Tithes</label>
+            <strong id="totalTithe" style="color: var(--google-red);">R0.00</strong>
+        </div>
+        <div class="summary-item">
+            <label>Stock Portfolio</label>
+            <strong id="totalStock" style="color: #673AB7;">R0.00</strong>
         </div>
     </div>
 
-    <div id="previewModal" class="modal" onclick="toggleModal(false)">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <h2 style="margin-bottom: 10px;">Current Ledger Entries</h2>
-            <div id="tableOutput"></div>
-            <button onclick="downloadExcel()" style="margin-top: 20px; background: var(--success-500); color: white; width: 100%;">📥 Download Excel File</button>
+    <div class="card">
+        <div id="status-bar"></div>
+        <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+            <div id="uploadText">
+                <strong>📂 Upload Spreadsheet to Begin</strong><br>
+                <span style="font-size: 12px; color: #70757a;">Unlock calculations by importing your ledger</span>
+            </div>
+            <input type="file" id="fileInput" accept=".xlsx" style="display:none" onchange="handleFile(this)">
         </div>
     </div>
 
-    <script>
-        let workbook, worksheet;
-        let dataStore = [];
-
-        function formatR(val) {
-            return "R" + val.toLocaleString('en-ZA', { minimumFractionDigits: 2 });
-        }
-
-        function calculate() {
-            const income = parseFloat(document.getElementById('incomeInput').value) || 0;
+    <div id="calcSection" class="lock-overlay">
+        <div class="card">
+            <label>New Revenue Entry (R)</label>
+            <input type="number" id="revenueInput" placeholder="Enter Amount" oninput="calculateCurrent()">
             
-            // Core Splits
-            const tithe = income * 0.16;
-            const bizTotal = income * 0.84;
-            
-            // Business Splits (Totaling the 84%)
-            const savings = bizTotal * 0.40;
-            const flow = bizTotal * 0.25;
-            const growth = bizTotal * 0.10; // Adjusted for stocks
-            const stocks = bizTotal * 0.09; // New Stock Reserve
+            <div class="grid">
+                <div class="stat-card" style="border-left-color: var(--google-red);">
+                    <span class="stat-label">Tithes (16%)</span>
+                    <span class="stat-val" id="tD">R0.00</span>
+                </div>
+                <div class="stat-card" style="border-left-color: var(--google-blue);">
+                    <span class="stat-label">Savings (40%)</span>
+                    <span class="stat-val" id="sD">R0.00</span>
+                </div>
+                <div class="stat-card" style="border-left-color: var(--google-green);">
+                    <span class="stat-label">Ops (25%)</span>
+                    <span class="stat-val" id="fD">R0.00</span>
+                </div>
+                <div class="stat-card" style="border-left-color: var(--google-yellow);">
+                    <span class="stat-label">Growth (10%)</span>
+                    <span class="stat-val" id="gD">R0.00</span>
+                </div>
+                <div class="stat-card" style="border-left-color: #673AB7;">
+                    <span class="stat-label">Stocks (9%)</span>
+                    <span class="stat-val" id="stD">R0.00</span>
+                </div>
+            </div>
 
-            document.getElementById('titheDisp').textContent = formatR(tithe);
-            document.getElementById('saveDisp').textContent = formatR(savings);
-            document.getElementById('flowDisp').textContent = formatR(flow);
-            document.getElementById('growDisp').textContent = formatR(growth);
-            document.getElementById('stockDisp').textContent = formatR(stocks);
+            <button class="btn btn-blue" onclick="syncAndRefresh()">💾 Sync to Ledger & Update Totals</button>
+            <button class="btn btn-green" onclick="downloadFile()">📥 Download Updated File</button>
+            <button class="btn btn-whatsapp" onclick="copyWhatsApp()">📱 Copy WhatsApp Summary</button>
+        </div>
+    </div>
+</div>
 
-            return { income, tithe, savings, flow, growth, stocks };
-        }
+<script>
+    let sheetData = [];
+    let fileName = "Sisonke_Ledger.xlsx";
 
-        function updateExcel() {
-            const vals = calculate();
-            const date = new Date().toLocaleDateString('en-ZA');
-            
-            const newEntries = [
-                [date, "Monthly Income Source", "Revenue", vals.income, 0],
-                [date, "Spiritual Tithe", "Tithe", 0, vals.tithe],
-                [date, "Business Safety Fund", "Savings", 0, vals.savings],
-                [date, "Operations/Cashflow", "Ops", 0, vals.flow],
-                [date, "Marketing & Growth", "Expansion", 0, vals.growth],
-                [date, "Stock Portfolio Reserve", "Investment", 0, vals.stocks]
-            ];
+    function formatR(v) { return "R" + (v || 0).toLocaleString('en-ZA', {minimumFractionDigits: 2}); }
 
-            dataStore.push(...newEntries);
-            renderTable();
-            document.getElementById('status').textContent = "✅ Excel Buffer Updated!";
-        }
+    function handleFile(input) {
+        const file = input.files[0];
+        if(!file) return;
+        fileName = file.name;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const data = new Uint8Array(e.target.result);
+            const wb = XLSX.read(data, {type: 'array'});
+            sheetData = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header: 1});
+            document.getElementById('calcSection').classList.add('unlocked');
+            document.getElementById('uploadText').innerHTML = `✅ <strong>${fileName}</strong> Linked`;
+            refreshDashboard();
+        };
+        reader.readAsArrayBuffer(file);
+    }
 
-        function renderTable() {
-            let html = `<table><tr><th>Date</th><th>Desc</th><th>Cat</th><th>In</th><th>Out</th></tr>`;
-            dataStore.forEach(row => {
-                html += `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td><td>${row[3]}</td><td>${row[4]}</td></tr>`;
-            });
-            html += `</table>`;
-            document.getElementById('tableOutput').innerHTML = html;
-        }
+    function calculateCurrent() {
+        const inc = parseFloat(document.getElementById('revenueInput').value) || 0;
+        const biz = inc * 0.84;
+        const res = { t: inc*0.16, s: biz*0.4, f: biz*0.25, g: biz*0.1, st: biz*0.09 };
+        
+        document.getElementById('tD').textContent = formatR(res.t);
+        document.getElementById('sD').textContent = formatR(res.s);
+        document.getElementById('fD').textContent = formatR(res.f);
+        document.getElementById('gD').textContent = formatR(res.g);
+        document.getElementById('stD').textContent = formatR(res.st);
+        return {inc, ...res};
+    }
 
-        function downloadExcel() {
-            const ws = XLSX.utils.aoa_to_sheet([["Date", "Description", "Category", "Income", "Expense"], ...dataStore]);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Sisonke Ledger");
-            XLSX.writeFile(wb, `Sisonke_Ledger_${new Date().getTime()}.xlsx`);
-        }
+    function refreshDashboard() {
+        let rev = 0, tith = 0, stck = 0;
+        // Assuming Column 3 is Income (Index 3) and Column 4 is Expense (Index 4)
+        // Adjust indices if your specific sheet structure differs
+        sheetData.forEach((row, i) => {
+            if(i === 0) return; // Skip header
+            const desc = String(row[1] || "").toLowerCase();
+            const valIn = parseFloat(row[3]) || 0;
+            const valOut = parseFloat(row[4]) || 0;
 
-        function copyWhatsApp() {
-            const v = calculate();
-            const text = `*SISONKE WEALTH SUMMARY*\n` +
-                         `--------------------------\n` +
-                         `💰 Gross: ${formatR(v.income)}\n` +
-                         `🙏 Tithe (16%): ${formatR(v.tithe)}\n` +
-                         `🏦 Savings: ${formatR(v.savings)}\n` +
-                         `⚙️ Ops: ${formatR(v.flow)}\n` +
-                         `📈 Growth: ${formatR(v.growth)}\n` +
-                         `💎 Stocks: ${formatR(v.stocks)}\n` +
-                         `--------------------------\n` +
-                         `_Every Rand Has Purpose_`;
-            
-            navigator.clipboard.writeText(text);
-            alert("Summary copied for WhatsApp!");
-        }
+            if(desc.includes("revenue")) rev += valIn;
+            if(desc.includes("tithe")) tith += valOut;
+            if(desc.includes("stock")) stck += valOut;
+        });
 
-        function toggleModal(show) {
-            document.getElementById('previewModal').style.display = show ? 'flex' : 'none';
-        }
+        document.getElementById('totalRev').textContent = formatR(rev);
+        document.getElementById('totalTithe').textContent = formatR(tith);
+        document.getElementById('totalStock').textContent = formatR(stck);
+    }
 
-        // Init
-        calculate();
-    </script>
+    function syncAndRefresh() {
+        const v = calculateCurrent();
+        if(v.inc <= 0) return alert("Enter revenue first");
+        const date = new Date().toLocaleDateString('en-ZA');
+        
+        if(sheetData.length === 0) sheetData.push(["Date", "Description", "Category", "Income", "Expense"]);
+
+        sheetData.push([date, "Daily Revenue Entry", "Revenue", v.inc, ""]);
+        sheetData.push([date, "Tithes (16%)", "Spiritual", "", v.t]);
+        sheetData.push([date, "Business Savings (40%)", "Safety", "", v.s]);
+        sheetData.push([date, "Operations (25%)", "Cashflow", "", v.f]);
+        sheetData.push([date, "Business Growth (10%)", "Marketing", "", v.g]);
+        sheetData.push([date, "Stock Portfolio Reserve (9%)", "Investment", "", v.st]);
+
+        refreshDashboard();
+        document.getElementById('revenueInput').value = "";
+        alert("Synced! Dashboard Updated.");
+    }
+
+    function downloadFile() {
+        const ws = XLSX.utils.aoa_to_sheet(sheetData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Sisonke Ledger");
+        XLSX.writeFile(wb, "Updated_" + fileName);
+    }
+
+    function copyWhatsApp() {
+        const v = calculateCurrent();
+        const text = `*SISONKE ENTRY*\nRev: ${formatR(v.inc)}\nTithe: ${formatR(v.t)}\nStocks: ${formatR(v.st)}\n_Total Updated in Ledger_`;
+        navigator.clipboard.writeText(text);
+        alert("WhatsApp Summary Copied!");
+    }
+</script>
 </body>
 </html>
