@@ -2,204 +2,272 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sisonke CV - Google Sync Pro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sisonke Daily Financial Tracker</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         :root {
-            --google-blue: #4285F4; --google-red: #EA4335; --google-yellow: #FBBC05;
-            --google-green: #34A853; --bg-light: #F8F9FA; --text-dark: #202124;
-            --border-gray: #DADCE0;
+            --google-blue: #1A73E8;
+            --google-red: #D93025;
+            --google-green: #1E8E3E;
+            --google-yellow: #F9AB00;
+            --bg-light: #F1F3F4;
+            --text-main: #202124;
+            --text-secondary: #5F6368;
+            --card-shadow: 0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15);
         }
 
-        body { font-family: 'Roboto', sans-serif; background-color: var(--bg-light); color: var(--text-dark); padding: 20px; display: flex; justify-content: center; }
-        .container { width: 100%; max-width: 850px; }
-        .header { text-align: center; margin-bottom: 24px; }
-        .header h1 { font-weight: 500; color: #5f6368; }
+        body { 
+            font-family: 'Roboto', sans-serif; 
+            background-color: var(--bg-light); 
+            color: var(--text-main); 
+            margin: 0; 
+            padding: 12px;
+            -webkit-font-smoothing: antialiased;
+        }
 
-        /* Summary Dashboard */
-        .summary-dashboard { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
-        .summary-item { background: white; border: 1px solid var(--border-gray); padding: 15px; border-radius: 8px; text-align: center; }
-        .summary-item strong { display: block; font-size: 18px; color: var(--google-blue); }
-        .summary-item label { font-size: 11px; text-transform: uppercase; color: #70757a; }
+        .container { width: 100%; max-width: 500px; margin: 0 auto; }
 
-        .card { background: white; border: 1px solid var(--border-gray); border-radius: 8px; padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(60,64,67,.15); }
+        .header { text-align: left; padding: 16px 4px; }
+        .header h1 { font-size: 22px; font-weight: 500; margin: 0; color: var(--text-main); }
+        .header p { font-size: 14px; color: var(--text-secondary); margin: 4px 0 0; }
 
-        .lock-overlay { opacity: 0.3; pointer-events: none; transition: 0.3s; }
-        .unlocked { opacity: 1; pointer-events: all; }
+        .summary-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr 1fr; 
+            gap: 8px; 
+            margin-bottom: 16px; 
+        }
+        .summary-item { 
+            background: white; 
+            padding: 12px 8px; 
+            border-radius: 8px; 
+            text-align: center; 
+            box-shadow: var(--card-shadow);
+        }
+        .summary-item label { font-size: 10px; text-transform: uppercase; display: block; color: var(--text-secondary); margin-bottom: 4px; }
+        .summary-item strong { font-size: 14px; color: var(--google-blue); word-break: break-all; }
 
-        .upload-zone { border: 2px dashed var(--google-blue); padding: 30px; text-align: center; border-radius: 8px; background: #f1f3f4; cursor: pointer; }
+        .card { 
+            background: white; 
+            border-radius: 8px; 
+            padding: 20px; 
+            margin-bottom: 16px; 
+            box-shadow: var(--card-shadow);
+        }
+
+        .lock-overlay { opacity: 0.25; pointer-events: none; filter: grayscale(1); }
+        .unlocked { opacity: 1; pointer-events: all; filter: none; }
+
+        .file-box {
+            border: 1px solid #DADCE0;
+            padding: 24px 16px;
+            text-align: center;
+            border-radius: 8px;
+            background: #FAFAFA;
+            cursor: pointer;
+        }
+
+        label.field-label { font-size: 13px; font-weight: 500; display: block; margin-bottom: 8px; color: var(--text-main); }
         
-        input[type="number"] { width: 100%; padding: 12px; font-size: 24px; border: 1px solid var(--border-gray); border-radius: 4px; box-sizing: border-box; }
+        input[type="number"] { 
+            width: 100%; 
+            padding: 14px; 
+            font-size: 24px; 
+            border: 1px solid #DADCE0; 
+            border-radius: 6px; 
+            box-sizing: border-box;
+            background-color: #FFF;
+            outline: none;
+        }
+        input[type="number"]:focus { border-color: var(--google-blue); }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin: 20px 0; }
-        .stat-card { padding: 12px; border-radius: 4px; background: #fff; border: 1px solid var(--border-gray); border-left: 5px solid; }
-        .stat-val { font-size: 16px; font-weight: 700; display: block; }
-        .stat-label { font-size: 10px; color: #70757a; text-transform: uppercase; }
+        .allocation-list { margin: 16px 0; }
+        .row { 
+            display: flex; 
+            justify-content: space-between; 
+            padding: 10px 0; 
+            border-bottom: 1px solid #F1F3F4; 
+        }
+        .row:last-child { border-bottom: none; }
+        .row span { font-size: 14px; }
+        .row .val { font-weight: 700; }
 
-        .btn { padding: 12px 24px; border-radius: 4px; font-weight: 500; border: none; cursor: pointer; transition: 0.2s; }
-        .btn-blue { background: var(--google-blue); color: white; }
-        .btn-green { background: var(--google-green); color: white; }
-        .btn-whatsapp { background: #25D366; color: white; width: 100%; margin-top: 10px; }
+        .btn { 
+            width: 100%; 
+            padding: 14px; 
+            border-radius: 6px; 
+            font-size: 15px; 
+            font-weight: 500; 
+            border: none; 
+            cursor: pointer; 
+            margin-bottom: 10px;
+        }
+        .btn-primary { background: var(--google-blue); color: white; }
+        .btn-secondary { background: #FFF; color: var(--text-main); border: 1px solid #DADCE0; }
+        .btn-whatsapp { background: #25D366; color: white; font-weight: 700; }
         
-        #status-bar { padding: 12px; border-radius: 4px; margin-bottom: 15px; font-size: 14px; text-align: center; display: none; }
+        #status-msg { font-size: 13px; text-align: center; margin-bottom: 10px; padding: 8px; border-radius: 4px; display: none; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <h1>Sisonke CV Business Tracker</h1>
+        <h1>Sisonke Daily Financial Tracker</h1>
+        <p>Managed Business Revenue Flow</p>
     </div>
 
-    <div class="summary-dashboard">
+    <div class="summary-grid">
         <div class="summary-item">
-            <label>Total Revenue</label>
+            <label>Revenue</label>
             <strong id="totalRev">R0.00</strong>
         </div>
         <div class="summary-item">
-            <label>Total Tithes</label>
-            <strong id="totalTithe" style="color: var(--google-red);">R0.00</strong>
+            <label>Tithes</label>
+            <strong id="totalTithe">R0.00</strong>
         </div>
-        <div class="summary-item">
-            <label>Stock Portfolio</label>
-            <strong id="totalStock" style="color: #673AB7;">R0.00</strong>
+        <div class="summary-item" style="border-right: none;">
+            <label>Stocks</label>
+            <strong id="totalStock">R0.00</strong>
         </div>
     </div>
 
     <div class="card">
-        <div id="status-bar"></div>
-        <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+        <div id="status-msg"></div>
+        <div class="file-box" onclick="document.getElementById('fileInput').click()">
             <div id="uploadText">
-                <strong>📂 Upload Spreadsheet to Begin</strong><br>
-                <span style="font-size: 12px; color: #70757a;">Unlock calculations by importing your ledger</span>
+                <strong>Link Spreadsheet</strong><br>
+                <span style="font-size: 12px; color: var(--text-secondary);">Select file to enable entry</span>
             </div>
             <input type="file" id="fileInput" accept=".xlsx" style="display:none" onchange="handleFile(this)">
         </div>
     </div>
 
-    <div id="calcSection" class="lock-overlay">
+    <div id="mainUI" class="lock-overlay">
         <div class="card">
-            <label>New Revenue Entry (R)</label>
-            <input type="number" id="revenueInput" placeholder="Enter Amount" oninput="calculateCurrent()">
+            <label class="field-label">New Revenue Entry (ZAR)</label>
+            <input type="number" id="revInput" placeholder="0.00" oninput="calculate()">
             
-            <div class="grid">
-                <div class="stat-card" style="border-left-color: var(--google-red);">
-                    <span class="stat-label">Tithes (16%)</span>
-                    <span class="stat-val" id="tD">R0.00</span>
+            <div class="allocation-list">
+                <div class="row" style="color: var(--google-red);">
+                    <span>Tithes (16%)</span>
+                    <span class="val" id="tD">R0.00</span>
                 </div>
-                <div class="stat-card" style="border-left-color: var(--google-blue);">
-                    <span class="stat-label">Savings (40%)</span>
-                    <span class="stat-val" id="sD">R0.00</span>
+                <div class="row">
+                    <span>Biz Savings (40%)</span>
+                    <span class="val" id="sD">R0.00</span>
                 </div>
-                <div class="stat-card" style="border-left-color: var(--google-green);">
-                    <span class="stat-label">Ops (25%)</span>
-                    <span class="stat-val" id="fD">R0.00</span>
+                <div class="row">
+                    <span>Operations (25%)</span>
+                    <span class="val" id="fD">R0.00</span>
                 </div>
-                <div class="stat-card" style="border-left-color: var(--google-yellow);">
-                    <span class="stat-label">Growth (10%)</span>
-                    <span class="stat-val" id="gD">R0.00</span>
+                <div class="row">
+                    <span>Biz Growth (10%)</span>
+                    <span class="val" id="gD">R0.00</span>
                 </div>
-                <div class="stat-card" style="border-left-color: #673AB7;">
-                    <span class="stat-label">Stocks (9%)</span>
-                    <span class="stat-val" id="stD">R0.00</span>
+                <div class="row" style="color: #673AB7;">
+                    <span>Stock Reserve (9%)</span>
+                    <span class="val" id="stD">R0.00</span>
                 </div>
             </div>
 
-            <button class="btn btn-blue" onclick="syncAndRefresh()">💾 Sync to Ledger & Update Totals</button>
-            <button class="btn btn-green" onclick="downloadFile()">📥 Download Updated File</button>
-            <button class="btn btn-whatsapp" onclick="copyWhatsApp()">📱 Copy WhatsApp Summary</button>
+            <button class="btn btn-whatsapp" onclick="copyWA()">Copy Daily Summary</button>
+            <button class="btn btn-primary" onclick="sync()">Sync to Ledger</button>
+            <button class="btn btn-secondary" onclick="exportFile()">Export Updated File</button>
         </div>
     </div>
 </div>
 
 <script>
     let sheetData = [];
-    let fileName = "Sisonke_Ledger.xlsx";
+    let activeFileName = "Ledger.xlsx";
 
-    function formatR(v) { return "R" + (v || 0).toLocaleString('en-ZA', {minimumFractionDigits: 2}); }
+    function format(v) { return "R" + (v || 0).toLocaleString('en-ZA', {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
 
     function handleFile(input) {
         const file = input.files[0];
         if(!file) return;
-        fileName = file.name;
+        activeFileName = file.name;
         const reader = new FileReader();
         reader.onload = function(e) {
             const data = new Uint8Array(e.target.result);
             const wb = XLSX.read(data, {type: 'array'});
             sheetData = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header: 1});
-            document.getElementById('calcSection').classList.add('unlocked');
-            document.getElementById('uploadText').innerHTML = `✅ <strong>${fileName}</strong> Linked`;
-            refreshDashboard();
+            document.getElementById('mainUI').classList.add('unlocked');
+            document.getElementById('uploadText').innerHTML = `Linked: <strong>${activeFileName}</strong>`;
+            updateDashboard();
         };
         reader.readAsArrayBuffer(file);
     }
 
-    function calculateCurrent() {
-        const inc = parseFloat(document.getElementById('revenueInput').value) || 0;
-        const biz = inc * 0.84;
-        const res = { t: inc*0.16, s: biz*0.4, f: biz*0.25, g: biz*0.1, st: biz*0.09 };
-        
-        document.getElementById('tD').textContent = formatR(res.t);
-        document.getElementById('sD').textContent = formatR(res.s);
-        document.getElementById('fD').textContent = formatR(res.f);
-        document.getElementById('gD').textContent = formatR(res.g);
-        document.getElementById('stD').textContent = formatR(res.st);
-        return {inc, ...res};
+    function calculate() {
+        const amt = parseFloat(document.getElementById('revInput').value) || 0;
+        const biz = amt * 0.84;
+        const vals = {
+            t: amt * 0.16,
+            s: biz * 0.40,
+            f: biz * 0.25,
+            g: biz * 0.10,
+            st: biz * 0.09
+        };
+        document.getElementById('tD').textContent = format(vals.t);
+        document.getElementById('sD').textContent = format(vals.s);
+        document.getElementById('fD').textContent = format(vals.f);
+        document.getElementById('gD').textContent = format(vals.g);
+        document.getElementById('stD').textContent = format(vals.st);
+        return {amt, ...vals};
     }
 
-    function refreshDashboard() {
+    function updateDashboard() {
         let rev = 0, tith = 0, stck = 0;
-        // Assuming Column 3 is Income (Index 3) and Column 4 is Expense (Index 4)
-        // Adjust indices if your specific sheet structure differs
         sheetData.forEach((row, i) => {
-            if(i === 0) return; // Skip header
+            if(i === 0) return;
             const desc = String(row[1] || "").toLowerCase();
-            const valIn = parseFloat(row[3]) || 0;
-            const valOut = parseFloat(row[4]) || 0;
-
-            if(desc.includes("revenue")) rev += valIn;
-            if(desc.includes("tithe")) tith += valOut;
-            if(desc.includes("stock")) stck += valOut;
+            const inc = parseFloat(row[3]) || 0;
+            const exp = parseFloat(row[4]) || 0;
+            if(desc.includes("revenue")) rev += inc;
+            if(desc.includes("tithe")) tith += exp;
+            if(desc.includes("stock")) stck += exp;
         });
-
-        document.getElementById('totalRev').textContent = formatR(rev);
-        document.getElementById('totalTithe').textContent = formatR(tith);
-        document.getElementById('totalStock').textContent = formatR(stck);
+        document.getElementById('totalRev').textContent = format(rev);
+        document.getElementById('totalTithe').textContent = format(tith);
+        document.getElementById('totalStock').textContent = format(stck);
     }
 
-    function syncAndRefresh() {
-        const v = calculateCurrent();
-        if(v.inc <= 0) return alert("Enter revenue first");
+    function sync() {
+        const v = calculate();
+        if(v.amt <= 0) return;
         const date = new Date().toLocaleDateString('en-ZA');
-        
         if(sheetData.length === 0) sheetData.push(["Date", "Description", "Category", "Income", "Expense"]);
 
-        sheetData.push([date, "Daily Revenue Entry", "Revenue", v.inc, ""]);
-        sheetData.push([date, "Tithes (16%)", "Spiritual", "", v.t]);
-        sheetData.push([date, "Business Savings (40%)", "Safety", "", v.s]);
-        sheetData.push([date, "Operations (25%)", "Cashflow", "", v.f]);
-        sheetData.push([date, "Business Growth (10%)", "Marketing", "", v.g]);
-        sheetData.push([date, "Stock Portfolio Reserve (9%)", "Investment", "", v.st]);
+        sheetData.push([date, "Daily Revenue", "Revenue", v.amt, ""]);
+        sheetData.push([date, "Daily Tithe (16%)", "Spiritual", "", v.t]);
+        sheetData.push([date, "Daily Savings (40%)", "Safety", "", v.s]);
+        sheetData.push([date, "Daily Operations (25%)", "Cashflow", "", v.f]);
+        sheetData.push([date, "Daily Growth (10%)", "Marketing", "", v.g]);
+        sheetData.push([date, "Daily Stock (9%)", "Investment", "", v.st]);
 
-        refreshDashboard();
-        document.getElementById('revenueInput').value = "";
-        alert("Synced! Dashboard Updated.");
+        updateDashboard();
+        document.getElementById('revInput').value = "";
+        alert("Entry synced to ledger.");
     }
 
-    function downloadFile() {
+    function exportFile() {
         const ws = XLSX.utils.aoa_to_sheet(sheetData);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Sisonke Ledger");
-        XLSX.writeFile(wb, "Updated_" + fileName);
+        XLSX.writeFile(wb, "Updated_" + activeFileName);
     }
 
-    function copyWhatsApp() {
-        const v = calculateCurrent();
-        const text = `*SISONKE ENTRY*\nRev: ${formatR(v.inc)}\nTithe: ${formatR(v.t)}\nStocks: ${formatR(v.st)}\n_Total Updated in Ledger_`;
-        navigator.clipboard.writeText(text);
-        alert("WhatsApp Summary Copied!");
+    function copyWA() {
+        const v = calculate();
+        if(v.amt <= 0) return;
+        const d = new Date().toLocaleDateString('en-ZA');
+        const msg = `*DAILY TRACKER [${d}]*\nRevenue: ${format(v.amt)}\n---\nTithe: ${format(v.t)}\nSavings: ${format(v.s)}\nOps: ${format(v.f)}\nGrowth: ${format(v.g)}\nStocks: ${format(v.st)}`;
+        navigator.clipboard.writeText(msg);
+        alert("Summary copied.");
     }
 </script>
 </body>
