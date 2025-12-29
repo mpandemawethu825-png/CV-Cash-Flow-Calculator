@@ -17,7 +17,6 @@
             --text-secondary: #5F6368;
             --card-shadow: 0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15);
         }
-
         body { 
             font-family: 'Roboto', sans-serif; 
             background-color: var(--bg-light); 
@@ -26,9 +25,7 @@
             padding: 12px;
             -webkit-font-smoothing: antialiased;
         }
-
         .container { width: 100%; max-width: 500px; margin: 0 auto; }
-
         .header { text-align: left; padding: 16px 4px; }
         .header h1 { font-size: 22px; font-weight: 500; margin: 0; color: var(--text-main); }
         .header p { font-size: 14px; color: var(--text-secondary); margin: 4px 0 0; }
@@ -56,8 +53,7 @@
             margin-bottom: 16px; 
             box-shadow: var(--card-shadow);
         }
-
-        .lock-overlay { opacity: 0.25; pointer-events: none; filter: grayscale(1); }
+        .lock-overlay { opacity: 0.25; pointer-events: none; filter: grayscale(1); transition: 0.3s; }
         .unlocked { opacity: 1; pointer-events: all; filter: none; }
 
         .file-box {
@@ -70,7 +66,6 @@
         }
 
         label.field-label { font-size: 13px; font-weight: 500; display: block; margin-bottom: 8px; color: var(--text-main); }
-        
         input[type="number"] { 
             width: 100%; 
             padding: 14px; 
@@ -125,21 +120,20 @@
             <strong id="totalRev">R0.00</strong>
         </div>
         <div class="summary-item">
-            <label>Tithes</label>
-            <strong id="totalTithe">R0.00</strong>
+            <label>Ads & Mkt</label>
+            <strong id="totalAds">R0.00</strong>
         </div>
-        <div class="summary-item" style="border-right: none;">
+        <div class="summary-item">
             <label>Stocks</label>
             <strong id="totalStock">R0.00</strong>
         </div>
     </div>
 
     <div class="card">
-        <div id="status-msg"></div>
         <div class="file-box" onclick="document.getElementById('fileInput').click()">
             <div id="uploadText">
                 <strong>Link Spreadsheet</strong><br>
-                <span style="font-size: 12px; color: var(--text-secondary);">Select file to enable entry</span>
+                <span style="font-size: 12px; color: var(--text-secondary);">Select Excel file to start</span>
             </div>
             <input type="file" id="fileInput" accept=".xlsx" style="display:none" onchange="handleFile(this)">
         </div>
@@ -152,28 +146,32 @@
             
             <div class="allocation-list">
                 <div class="row" style="color: var(--google-red);">
-                    <span>Tithes (16%)</span>
+                    <span>Tithes (10%)</span>
                     <span class="val" id="tD">R0.00</span>
                 </div>
-                <div class="row">
-                    <span>Biz Savings (40%)</span>
-                    <span class="val" id="sD">R0.00</span>
+                <div class="row" style="color: var(--google-blue); font-weight: bold;">
+                    <span>Ads & Marketing (30%)</span>
+                    <span class="val" id="adD">R0.00</span>
                 </div>
                 <div class="row">
-                    <span>Operations (25%)</span>
+                    <span>Operations (20%)</span>
                     <span class="val" id="fD">R0.00</span>
+                </div>
+                <div class="row">
+                    <span>Biz Savings (20%)</span>
+                    <span class="val" id="sD">R0.00</span>
                 </div>
                 <div class="row">
                     <span>Biz Growth (10%)</span>
                     <span class="val" id="gD">R0.00</span>
                 </div>
                 <div class="row" style="color: #673AB7;">
-                    <span>Stock Reserve (9%)</span>
+                    <span>Stock Reserve (10%)</span>
                     <span class="val" id="stD">R0.00</span>
                 </div>
             </div>
 
-            <button class="btn btn-whatsapp" onclick="copyWA()">Copy Daily Summary</button>
+            <button class="btn btn-whatsapp" onclick="copyWA()">Copy WhatsApp Summary</button>
             <button class="btn btn-primary" onclick="sync()">Sync to Ledger</button>
             <button class="btn btn-secondary" onclick="exportFile()">Export Updated File</button>
         </div>
@@ -184,8 +182,12 @@
     let sheetData = [];
     let activeFileName = "Ledger.xlsx";
 
-    function format(v) { return "R" + (v || 0).toLocaleString('en-ZA', {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
+    // Helper for South African currency formatting
+    function format(v) { 
+        return "R" + (v || 0).toLocaleString('en-ZA', {minimumFractionDigits: 2, maximumFractionDigits: 2}); 
+    }
 
+    // Handle File Upload
     function handleFile(input) {
         const file = input.files[0];
         if(!file) return;
@@ -202,73 +204,99 @@
         reader.readAsArrayBuffer(file);
     }
 
+    // New Percentage Logic
     function calculate() {
         const amt = parseFloat(document.getElementById('revInput').value) || 0;
-        const biz = amt * 0.84;
+        
+        // Final percentages as requested
         const vals = {
-            t: amt * 0.16,
-            s: biz * 0.40,
-            f: biz * 0.25,
-            g: biz * 0.10,
-            st: biz * 0.09
+            t: amt * 0.10,   // Tithes 10%
+            ad: amt * 0.30,  // Ads & Marketing 30%
+            f: amt * 0.20,   // Operations 20%
+            s: amt * 0.20,   // Savings 20%
+            g: amt * 0.10,   // Growth 10%
+            st: amt * 0.10   // Stock 10%
         };
+
+        // Update UI displays
         document.getElementById('tD').textContent = format(vals.t);
-        document.getElementById('sD').textContent = format(vals.s);
+        document.getElementById('adD').textContent = format(vals.ad);
         document.getElementById('fD').textContent = format(vals.f);
+        document.getElementById('sD').textContent = format(vals.s);
         document.getElementById('gD').textContent = format(vals.g);
         document.getElementById('stD').textContent = format(vals.st);
+        
         return {amt, ...vals};
     }
 
+    // Update Top Summary Boxes
     function updateDashboard() {
-        let rev = 0, tith = 0, stck = 0;
+        let rev = 0, ads = 0, stck = 0;
         sheetData.forEach((row, i) => {
-            if(i === 0) return;
+            if(i === 0) return; // Skip header
             const desc = String(row[1] || "").toLowerCase();
+            const category = String(row[2] || "").toLowerCase();
             const inc = parseFloat(row[3]) || 0;
             const exp = parseFloat(row[4]) || 0;
-            if(desc.includes("revenue")) rev += inc;
-            if(desc.includes("tithe")) tith += exp;
-            if(desc.includes("stock")) stck += exp;
+
+            if(category.includes("revenue") || desc.includes("revenue")) rev += inc;
+            if(category.includes("marketing") || desc.includes("ads")) ads += exp;
+            if(category.includes("investment") || desc.includes("stock")) stck += exp;
         });
         document.getElementById('totalRev').textContent = format(rev);
-        document.getElementById('totalTithe').textContent = format(tith);
+        document.getElementById('totalAds').textContent = format(ads);
         document.getElementById('totalStock').textContent = format(stck);
     }
 
+    // Sync entries to the sheetData array
     function sync() {
         const v = calculate();
-        if(v.amt <= 0) return;
+        if(v.amt <= 0) {
+            alert("Please enter a revenue amount.");
+            return;
+        }
         const date = new Date().toLocaleDateString('en-ZA');
-        if(sheetData.length === 0) sheetData.push(["Date", "Description", "Category", "Income", "Expense"]);
+        
+        // Ensure header exists
+        if(sheetData.length === 0) {
+            sheetData.push(["Date", "Description", "Category", "Income", "Expense"]);
+        }
 
+        // Add 6 Rows for the breakdown
         sheetData.push([date, "Daily Revenue", "Revenue", v.amt, ""]);
-        sheetData.push([date, "Daily Tithe (16%)", "Spiritual", "", v.t]);
-        sheetData.push([date, "Daily Savings (40%)", "Safety", "", v.s]);
-        sheetData.push([date, "Daily Operations (25%)", "Cashflow", "", v.f]);
-        sheetData.push([date, "Daily Growth (10%)", "Marketing", "", v.g]);
-        sheetData.push([date, "Daily Stock (9%)", "Investment", "", v.st]);
+        sheetData.push([date, "Tithe (10%)", "Spiritual", "", v.t]);
+        sheetData.push([date, "Ads & Marketing (30%)", "Marketing", "", v.ad]);
+        sheetData.push([date, "Operations (20%)", "Cashflow", "", v.f]);
+        sheetData.push([date, "Savings (20%)", "Safety", "", v.s]);
+        sheetData.push([date, "Growth (10%)", "Capital", "", v.g]);
+        sheetData.push([date, "Stock (10%)", "Investment", "", v.st]);
 
         updateDashboard();
         document.getElementById('revInput').value = "";
-        alert("Entry synced to ledger.");
+        alert("Success: Daily breakdown synced to local memory.");
     }
 
+    // Save as Excel File
     function exportFile() {
+        if(sheetData.length === 0) return;
         const ws = XLSX.utils.aoa_to_sheet(sheetData);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Sisonke Ledger");
         XLSX.writeFile(wb, "Updated_" + activeFileName);
     }
 
+    // WhatsApp Copy Tool
     function copyWA() {
         const v = calculate();
         if(v.amt <= 0) return;
         const d = new Date().toLocaleDateString('en-ZA');
-        const msg = `*DAILY TRACKER [${d}]*\nRevenue: ${format(v.amt)}\n---\nTithe: ${format(v.t)}\nSavings: ${format(v.s)}\nOps: ${format(v.f)}\nGrowth: ${format(v.g)}\nStocks: ${format(v.st)}`;
-        navigator.clipboard.writeText(msg);
-        alert("Summary copied.");
+        const msg = `*SISONKE DAILY TRACKER [${d}]*\n--------------------------\nGross Revenue: ${format(v.amt)}\n\n*ALLOCATIONS:*\n🙏 Tithe (10%): ${format(v.t)}\n📢 Ads (30%): ${format(v.ad)}\n⚙️ Ops (20%): ${format(v.f)}\n💰 Savings (20%): ${format(v.s)}\n📈 Growth (10%): ${format(v.g)}\n📦 Stock (10%): ${format(v.st)}`;
+        
+        navigator.clipboard.writeText(msg).then(() => {
+            alert("WhatsApp summary copied to clipboard!");
+        });
     }
 </script>
+
 </body>
 </html>
